@@ -3,7 +3,6 @@ version: '3.8'
 services:
   bot:
     build: .
-    container_name: telegram_bot
     restart: always
     env_file: .env
     depends_on:
@@ -11,12 +10,11 @@ services:
     networks:
       - bot_network
 
-  celery_worker:
+  worker:
     build: .
-    container_name: celery_worker
     restart: always
     env_file: .env
-    command: celery -A app.workers.celery_app worker --loglevel=info --pool=solo
+    command: python -m app.worker.main
     depends_on:
       - redis
     networks:
